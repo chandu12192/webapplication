@@ -1,0 +1,58 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'maven-publish'
+
+
+
+
+
+
+
+
+publishing {
+		publications {                      // What we need to publish
+			app99(MavenPublication) {
+				groupId = "com.saipsit.webapps.webapp.webapplications"
+				artifactId = "app99"
+				version = "1.0.2"
+
+				artifact source: "${buildDir}/libs/app01.war"
+				
+			}
+			app100(MavenPublication) {
+				groupId = "com.saipsit.webapps.webapp.webapplications"
+				artifactId = "app100"
+				version = "1.0.2"
+
+				artifact source: "${buildDir}/libs/app01.war"
+				
+			}
+		}
+
+		repositories {                 //Where we should publish
+			maven {
+				url = 'http://192.168.111.149:8081/nexus/content/repositories/saipsit'
+				credentials {
+					username = 'admin'
+					password = 'admin123'
+				}
+			}
+		}
+
+	}
+	
+	
+	
+	
+	task downloadArtifact {
+	
+		//def artifactUrl = "http://192.168.111.149:8081/nexus/service/local/lucene/search?g=com.saipsit.webapplications&a=app02&v=1.0.0"
+		def fileUrl = "${buildDir}/libs/temp/downloaded01.war"
+		
+		def fileDownloaded = new File(fileUrl)   // Create File object
+		def file1 = fileDownloaded.newOutputStream() // file1 is the outputstream
+		file1 << new URL(artifactUrl).openStream() // open the url and whetever you see send it to file1
+		file1.close()
+	
+	}
+	
